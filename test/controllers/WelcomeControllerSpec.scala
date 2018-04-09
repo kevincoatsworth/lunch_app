@@ -13,4 +13,11 @@ class WelcomeControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
         status(result) mustBe OK
       }
     }
+
+  "respond to the /welcome url" in {
+    //Need to specific Host header to get through AllowedHostFilter
+    val request = FakeRequest(GET, "/welcome").withHeaders("Host" -> "localHost")
+    val home = route(app, request).get
+    status(home) mustBe OK
+  }
 }
