@@ -20,4 +20,10 @@ class WelcomeControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
     val home = route(app, request).get
     status(home) mustBe OK
   }
+
+  "return some html" in {
+    val controller = new WelcomeController
+    val result = controller.welcome().apply(FakeRequest())
+    contentType(result) mustBe Some("text/html")
+  }
 }
