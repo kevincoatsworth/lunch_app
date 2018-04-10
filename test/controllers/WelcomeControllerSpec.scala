@@ -1,5 +1,7 @@
 package controllers
 
+import java.util.Calendar
+
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
@@ -7,11 +9,23 @@ import play.api.test.Helpers.{status, _}
 import services.GreetingService
 
 object FakeMorningGreeter extends GreetingService {
-  override def greeting: String = "Good morning!"
+  def greeting: String = {
+    val currentHour = FakeMorningCalendar.get(Calendar.HOUR_OF_DAY)
+    if (currentHour < 12)
+      "Good morning!"
+    else
+      "Good afternoon!"
+  }
 }
 
 object FakeAfternoonGreeter extends GreetingService {
-  override def greeting: String = "Good afternoon!"
+  def greeting: String = {
+    val currentHour = FakeAfternoonCalendar.get(Calendar.HOUR_OF_DAY)
+    if (currentHour < 12)
+      "Good morning!"
+    else
+      "Good afternoon!"
+  }
 }
 
 class WelcomeControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
@@ -50,4 +64,31 @@ class WelcomeControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
       contentAsString(result) must include ("<title>Welcome!</title>")
     }
   }
+}
+
+class FakeCalendar extends java.util.Calendar {
+
+  override def computeTime(): Unit = ???
+
+  override def computeFields(): Unit = ???
+
+  override def add(field: Int, amount: Int): Unit = ???
+
+  override def roll(field: Int, up: Boolean): Unit = ???
+
+  override def getMinimum(field: Int): Int = ???
+
+  override def getMaximum(field: Int): Int = ???
+
+  override def getGreatestMinimum(field: Int): Int = ???
+
+  override def getLeastMaximum(field: Int): Int = ???
+}
+
+object FakeMorningCalendar extends FakeCalendar {
+  override def get(field: Int): Int = 11
+}
+
+object FakeAfternoonCalendar extends FakeCalendar {
+  override def get(field: Int): Int = 13
 }

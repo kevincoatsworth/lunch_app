@@ -2,12 +2,11 @@ package services
 
 import java.util.Calendar
 
-import com.google.inject.ImplementedBy
+import com.google.inject.{ImplementedBy, Inject}
 
-class RealGreetingService extends GreetingService {
+class RealGreetingService @Inject()(calendar : Calendar) extends GreetingService {
   def greeting: String = {
-    val now = Calendar.getInstance()
-    val currentHour = now.get(Calendar.HOUR_OF_DAY)
+    val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
     if (currentHour < 12)
       "Good morning!"
     else
